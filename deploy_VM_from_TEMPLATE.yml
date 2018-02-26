@@ -1,0 +1,51 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+  vars_prompt:
+    - name: "vsphere_hostname"
+      prompt: "vSphere Hostname"
+    - name: "vsphere_username"
+      prompt: "vSphere Username"
+    - name: "vsphere_password"
+      prompt: "vSphere Password"
+    - name: "vsphere_datacenter"
+      prompt: "vSphere Datacenter"
+    - name: "notes"
+      prompt: "VM notes"
+      private: no
+      default: "Deployed with ansible"
+
+  tasks:
+  # get date
+  - set_fact: creationdate="{{lookup('pipe','date "+%Y/%m/%d %H:%M"')}}"
+
+  # Create a VM from a template
+  - name: create the VM
+    vmware_guest:
+      validate_certs: no
+      hostname: '{{ vsphere_hostname }}'
+      username: '{{ vsphere_username }}'
+      password: '{{ vsphere_password }}'
+      datacenter: '{{ vsphere_datacenter }}'
+      folder: '{{ vsphere_folder }}'
+      name: 'test_ansible'
+      state: poweredon
+      guest_id: Ubuntu64Guest
+      annotation: "{{ notes }} - {{ creationdate }}"
+      template: 'test_template'
+      disk:
+      - size_gb: 10
+        type: thin
+        datastore: g73_datastore
+      hardware:
+       memory_mb: 512
+       num_cpus: 1
+       scsi: paravirtual
+      networks:
+       - name: VM Network
+          mac: aa:bb:dd:aa:00:14
+          wait_for_ip_address: yes
+      delegate_to: localhost
+      register: deploy
