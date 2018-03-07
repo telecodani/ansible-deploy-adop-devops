@@ -1,0 +1,40 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+  vars_prompt:
+    - name: "vsphere_host"
+      prompt: "vSphere Host"
+    - name: "vsphere_user"
+      prompt: "vSphere User"
+    - name: "vsphere_password"
+      prompt: "vSphere Password"
+    - name: "vsphere_template"
+      prompt: "vSphere Template"    
+    - name: "vsphere_folder"
+      prompt: "vSphere Folder" 
+    - name: "vsphere_resourcepool"
+      prompt: "vSphere Resource Pool"
+    - name: "vsphere_datacenter"
+      prompt: "vSphere Datacenter"      
+      
+  tasks:
+  # get date
+  - set_fact: creationdate="{{lookup('pipe','date "+%Y/%m/%d %H:%M"')}}"
+
+  # Create a VM from a template
+  - name: create the VM
+    vmware_guest:
+      validate_certs: false
+      hostname: '{{ vsphere_host }}'
+      username: '{{ vsphere_user }}'
+      password: '{{ vsphere_password }}'
+      datacenter: '{{ vsphere_datacenter }}'
+      resource_pool: '{{ vsphere_resourcepool }}'
+      folder: "{{ vsphere_folder}}"
+      name: 'test_ansible_2'
+      state: poweredon
+      guest_id: Ubuntu64Guest
+      annotation: '{{ creationdate }}'
+      template: '{{ vsphere_template }}'
