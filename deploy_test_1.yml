@@ -6,18 +6,24 @@
   vars_prompt:
     - name: "vsphere_host"
       prompt: "vSphere Host"
+      private: no
     - name: "vsphere_user"
       prompt: "vSphere User"
+      private: no
     - name: "vsphere_password"
       prompt: "vSphere Password"
     - name: "vsphere_template"
-      prompt: "vSphere Template"    
+      prompt: "vSphere Template"
+      private: no
     - name: "vsphere_folder"
-      prompt: "vSphere Folder" 
+      prompt: "vSphere Folder"
+      private: no
     - name: "vsphere_resourcepool"
       prompt: "vSphere Resource Pool"
+      private: no
     - name: "vsphere_datacenter"
-      prompt: "vSphere Datacenter"      
+      prompt: "vSphere Datacenter"
+      private: no
       
   tasks:
   # get date
