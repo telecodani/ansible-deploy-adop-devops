@@ -9,6 +9,7 @@
   # Create a VM from a template.
   - name: create the VM
     vmware_guest:
+      become: true
       # Validate_certs must be false in case the Vcenter use a self-signed certificate.
       validate_certs: false
       hostname: '{{ vsphere_host }}'
