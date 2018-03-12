@@ -1,8 +1,8 @@
 # Tested on Vcenter 6.
 ---
-- hosts: localhost
+- hosts: DEV
   gather_facts: false
-  connection: local
+  #connection: local
 
   tasks:
 
