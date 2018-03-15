@@ -1,0 +1,12 @@
+# Tested on Vcenter 6.
+---
+- hosts: DEV
+  gather_facts: false
+  #connection: local
+
+  tasks:
+
+  # Create a VM from a template.
+  - name: create the VM
+    become: true
+    shell: docker cp e64856150051:/tmp/adop_test_3_log.txt /tmp/adop_test_3_log.txt
