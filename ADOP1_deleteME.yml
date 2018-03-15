@@ -1,0 +1,17 @@
+# Tested on Vcenter 6.
+---
+- hosts: DEV
+  gather_facts: false
+  
+  tasks:
+
+  # Power ON ADOP1.
+  - name: create the VM
+    vsphere_guest:
+     validate_certs: no
+     vcenter_hostname: 10.200.90.15
+     username: 'poc-auto-user1@vsphere.local'
+     password: "{{ vsphere_password }}"
+     guest: 'ADOP1'
+     state: absent
+     force: yes
