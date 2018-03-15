@@ -1,0 +1,58 @@
+---
+- hosts: adop
+  gather_facts: false
+
+  tasks:
+
+  - name: Lunch ADOP installation, STEP 1, extending file systems...
+    become: true
+    shell: |
+      lvresize -L +9G --resizefs /dev/mapper/vg--system-lv--root
+      lvresize -L +4G --resizefs /dev/mapper/vg--system-lv--var
+
+  - name: Lunch ADOP installation, STEP 2-1 Install apt-transport, ca-cert, curl, software-properties..., installing prerequisites...
+    become: true
+    shell: |
+      apt-get update -y
+      apt-get install apt-transport-https ca-certificates curl software-properties-common -y
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+  - name: Lunch ADOP installation, STEP 2-2 Add Docker repository, installing prerequisites...
+    become: true
+    shell: |
+      add-apt-repository \
+      "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) \
+      stable"
+
+  - name: Lunch ADOP installation, STEP 2-3 Install Docker-Ce, installing prerequisites...
+    become: true
+    shell: |
+      apt-get update -y
+      apt-get install docker-ce -y
+
+  - name: Lunch ADOP installation, STEP 2-4 Install Docker-Compose, installing prerequisites...
+    become: true
+    shell: |
+      curl -L https://github.com/docker/compose/releases/download/1.9.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+      chmod +x /usr/local/bin/docker-compose
+
+  - name: Lunch ADOP installation, STEP 3-1 Clone ADOP Github repo, cloning repository...
+    become: true
+    shell: |
+      cd /root
+      git clone https://github.com/Accenture/adop-docker-compose
+
+  - name: Lunch ADOP installation, STEP 3-2 Executing installation, installing ADOP... it may take a while
+    become: true
+    shell: |
+       export INITIAL_ADMIN_USER="administrator"
+       ./adop compose init >> /tmp/adop_test_3_log.txt
+    args:
+      chdir: /root/adop-docker-compose/
+
+  - name: Copy installation log from remote to local in /tmp
+    become: true
+    fetch:
+      src: /tmp/adop_test_3_log.txt
+      dest: /tmp/adop_test_3_log.txt
