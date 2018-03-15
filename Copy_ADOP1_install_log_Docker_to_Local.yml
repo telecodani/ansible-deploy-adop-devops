@@ -6,7 +6,14 @@
 
   tasks:
 
-  # Create a VM from a template.
-  - name: create the VM
+  # Copy the install log file from Docker to Local.
+  - name: copy the install log from docker to local
     become: true
     shell: docker cp e64856150051:/tmp/adop_test_3_log.txt /tmp/logs_from_awx_docker/
+  - name: tail log
+    become: true
+    shell: tail /tmp/logs_from_awx_docker/adop_test_3_log.txt/10.20.4.40/tmp/adop_test_3_log.txt
+    register: shell
+  - name: out tail
+    become: true
+    debug: msg={{ shell.stdout }}
