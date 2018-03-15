@@ -9,8 +9,8 @@
   - name: create the VM
     vsphere_guest:
      validate_certs: no
-     vcenter_hostname: 10.200.90.15
-     username: 'poc-auto-user1@vsphere.local'
+     vcenter_hostname: '{{ vsphere_host }}'
+     username: ''{{ vsphere_username}}'
      password: "{{ vsphere_password }}"
      guest: 'ADOP1'
      state: powered_off
