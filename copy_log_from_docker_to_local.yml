@@ -9,4 +9,4 @@
   # Create a VM from a template.
   - name: create the VM
     become: true
-    shell: docker cp e64856150051:/tmp/adop_test_3_log.txt /tmp/adop_test_3_log.txt
+    shell: docker cp e64856150051:/tmp/adop_test_3_log.txt /tmp/logs_from_awx_docker/
